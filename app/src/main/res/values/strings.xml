@@ -7,4 +7,9 @@
     <string name="plus_two">+2</string>
     <string name="points_visitant">0</string>
     <string name="already_at_zero">Ya se encuentra en cero. No puede bajar mas el marcador.</string>
+    <string name="local_visitante">Local - Visitante</string>
+    <string name="final_score">14 - 14</string>
+    <string name="final_message">Fue un empate 😕</string>
+    <string name="local_win">Ha ganado el equipo local! 😊</string>
+    <string name="visitant_win">Ha ganado el equipo visitante! 🤭</string>
 </resources>

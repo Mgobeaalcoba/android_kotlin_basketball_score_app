@@ -1,5 +1,6 @@
 package com.mgobeaalcoba.basketballscore
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -71,6 +72,22 @@ class MainActivity : AppCompatActivity() {
             binding.visitantScoreText.text = visitantScoreInt.toString()
         }
 
+        binding.resultsButton.setOnClickListener {
+            val match = MatchScore(localScoreInt, visitantScoreInt)
+            openDetailActivity(match)
+        }
 
     }
+
+    private fun openDetailActivity(matchScore : MatchScore) {
+        // Creamos in intent activity:
+        val intent = Intent(this, ScoreActivity::class.java) // Explicit intent
+
+        // Solo voy a pasar como putExtra el objeto matchScore:
+        intent.putExtra(ScoreActivity.MATCH_SCORE_KEY, matchScore)
+
+        // Enviamos el objeto matchScore a la siguiente activity:
+        startActivity(intent)
+    }
+
 }
