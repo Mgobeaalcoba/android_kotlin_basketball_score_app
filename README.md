@@ -1,6 +1,6 @@
 # android_kotlin_basketball_score_app
 
-Con esta app hemos profundizado y practicado, sin ningun acompañamiento los siguiente temas sobre Android: 
+Con esta app hemos profundizado y practicado los siguiente temas sobre Android: 
 
 - Android Views.
 - ImageViews - Incluye imágenes en tus apps.
