@@ -62,6 +62,15 @@ class MainActivity : AppCompatActivity() {
             binding.visitantScoreText.text = visitantScoreInt.toString()
         }
 
+        // Reloj
+
+        binding.restartButton.setOnClickListener {
+            localScoreInt = 0
+            visitantScoreInt = 0
+            binding.localScoreText.text = localScoreInt.toString()
+            binding.visitantScoreText.text = visitantScoreInt.toString()
+        }
+
 
     }
 }
