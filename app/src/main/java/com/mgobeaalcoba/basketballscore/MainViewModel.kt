@@ -1,43 +1,50 @@
 package com.mgobeaalcoba.basketballscore
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class MainViewModel: ViewModel() {
-    var localScoreInt = 0
-    var visitantScoreInt = 0
+    var localScoreInt: MutableLiveData<Int> = MutableLiveData()
+    var visitantScoreInt: MutableLiveData<Int> = MutableLiveData()
+
+    // Creamos una función init que se ejecuta apenas se instancia un MainViewModel
+    init {
+        resetScore() // Nos aseguramos que los valores van a arrancar en cero
+    }
 
     // Reset:
     fun resetScore() {
-        localScoreInt = 0
-        visitantScoreInt = 0
+        localScoreInt.value = 0
+        visitantScoreInt.value = 0
     }
 
     fun minusOne(local: Boolean) {
         if (local) {
-            --localScoreInt
+            // Ejecuto el minus solo si el value de localScoreInt no es nulo (safe call)
+            localScoreInt.value = localScoreInt.value?.minus(1)
         } else {
-            --visitantScoreInt
+            visitantScoreInt.value = visitantScoreInt.value?.minus(1)
         }
     }
 
    fun plusOne(local: Boolean) {
         if (local) {
-            ++localScoreInt
+            localScoreInt.value = localScoreInt.value?.plus(1)
         } else {
-            ++visitantScoreInt
+            visitantScoreInt.value = visitantScoreInt.value?.plus(1)
         }
     }
 
     fun plusTwo(local: Boolean) {
         if (local) {
-            localScoreInt += 2
+            localScoreInt.value = localScoreInt.value?.plus(2)
         } else {
-            visitantScoreInt += 2
+            visitantScoreInt.value = visitantScoreInt.value?.plus(2)
         }
     }
 
     fun createMatch() :MatchScore {
-        return MatchScore(localScoreInt, visitantScoreInt)
+        return MatchScore(localScoreInt.value!!, visitantScoreInt.value!!)
     }
 
 }
