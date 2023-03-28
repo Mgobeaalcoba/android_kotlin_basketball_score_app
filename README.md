@@ -28,7 +28,7 @@ Con esta app he profundizado y practicado los siguiente temas sobre Android:
 - ViewModel
 - LiveData & Observer
 - Encapsulamiento del ViewModel
-- Incorporación del ViewModel al Data Binbind
+- Incorporación del ViewModel al Data Binding
 
 Así luce la app terminada:
 
