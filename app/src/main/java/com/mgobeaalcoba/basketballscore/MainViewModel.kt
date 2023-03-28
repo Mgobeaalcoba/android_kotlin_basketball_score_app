@@ -25,13 +25,26 @@ class MainViewModel: ViewModel() {
         _visitantScoreInt.value = 0
     }
 
-    fun minusOne(local: Boolean) {
+    fun minusOne(local: Boolean) : Boolean {
+        var needToast = false
         if (local) {
-            // Ejecuto el minus solo si el value de localScoreInt no es nulo (safe call)
-            _localScoreInt.value = _localScoreInt.value?.minus(1)
+            // Solo reduzco si es distinto de cero.
+            if (_localScoreInt.value != 0) {
+                // Ejecuto el minus solo si el value de localScoreInt no es nulo (safe call)
+                _localScoreInt.value = _localScoreInt.value?.minus(1)
+            } else {
+                needToast = true
+            }
         } else {
-            _visitantScoreInt.value = _visitantScoreInt.value?.minus(1)
+            // Solo reduzco si es distinto de cero.
+            if (_visitantScoreInt.value != 0) {
+                // Ejecuto el minus solo si el value de localScoreInt no es nulo (safe call)
+                _visitantScoreInt.value = _visitantScoreInt.value?.minus(1)
+            } else {
+                needToast = true
+            }
         }
+        return needToast
     }
 
    fun plusOne(local: Boolean) {

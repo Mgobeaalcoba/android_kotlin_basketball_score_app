@@ -40,12 +40,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupButtons() {
-
         // Equipo Local:
         binding.localMinusButton.setOnClickListener {
-            if (viewModel.localScoreInt.value != 0) { // TODO: Lógica variable que tengo que sacarla aún
-                viewModel.minusOne(true)
-            } else {
+            val exeToast = viewModel.minusOne(true)
+            if (exeToast) {
                 Log.w("MainActivity","The score is already at zero")
                 Toast.makeText(this, getString(R.string.already_at_zero),Toast.LENGTH_SHORT).show()
             }
@@ -61,9 +59,8 @@ class MainActivity : AppCompatActivity() {
 
         // Equipo visitante:
         binding.visitantMinusButton.setOnClickListener {
-            if (viewModel.visitantScoreInt.value != 0) { // TODO: Lógica variable que tengo que sacarla aún
-                viewModel.minusOne(false)
-            } else {
+            val exeToast = viewModel.minusOne(false)
+            if (exeToast) {
                 Log.w("MainActivity","The score is already at zero")
                 Toast.makeText(this, getString(R.string.already_at_zero),Toast.LENGTH_SHORT).show()
             }
