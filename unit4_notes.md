@@ -205,3 +205,28 @@ Hacemos lo mismo con visitanScoreValue:
 ```
 
 **Al tener los "Observer" encendidos ya no es necesario que modifiquemos los .text cuando haya un cambio dado que eso lo va a hacer solo la lambda del "viewMode.{variable}.observe{owner, Observer}**
+
+-----------------------------------
+
+## **Encapsulamiento de los ViewModels**
+
+Problema: Desde MainActivity seguimos pudiendo editar los valores de nuestras variables localScoreInt y visitantScoreInt dado que no están encapsuladas. El encapsulamiento implica que determinados atributos, variables y metodos de una clase solo puedan ser accedidos desde la clase unicamente y no desde otro archivo del proyecto. 
+
+Por eso vamos a adaptar el codigo para encapsular como corresponde: 
+
+1- En MainViewModel vamos a declarar a nuestras **"var" como "private var"**
+2- Vamos a **sumarles delante un "_" (guion bajo)** a todas las "var" que queremos encapsular. Esto es una convención: los MutableLiveData privados deben empezar con "_"
+
+*Truco: En Android Studio e Intellij IDEO con "Shift+F6" selecciono todas las veces que aparece una variable (o cualquier otro termino) dentro del documento. Luego de la edición "Enter"*
+
+3- Creo **"val"´s adicionales del tipo "LiveData**" (las normales, solo legibles, pero no editables) para que estan sean accedidas por los demas documentos. Las mismas solo podrán leerle pero no editarse por tratarse de "val"´s y de ser no mutables por default. 
+
+**¡¡¡Listo!!!**
+
+Con esto ya no se podrá acceder a los LiveData editables desde otro archivo y solo podrán trabajarse desde MainViewModel respetando las reglas del encapsulamiento. 
+
+----------------------------------
+
+
+
+
