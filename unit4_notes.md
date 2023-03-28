@@ -63,7 +63,7 @@ Pasos para trabajar con ViewModel:
 En "dependencies" de build.gradle (:app) agregamos: 
 - "**implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1'**" -> Sync now
 2- En MainActivity creamos una variable global (es decir, dentro de la class MainActivity pero fuera del metodo "onCreate" del lyfecycle): 
-- **private lateinit var viewModel: ViewModel**
+- **private lateinit var viewModel: MainViewModel**
 3- Dentro del metodo "onCreate" vamos a instanciar a "viewModel:
 - **viewModel = ViewModelProvider(this).get(MainViewModel::class.java)** 
 Los ViewModel los creamos de esta manera porque tienen algo especial. Como dijimos arriba un ViewModel, cuando destruimos una actividad al girar el teléfono, por ejemplo, el ViewModel no se destruye, sino que sigue vivo hasta que la actividad se destruye por completo.

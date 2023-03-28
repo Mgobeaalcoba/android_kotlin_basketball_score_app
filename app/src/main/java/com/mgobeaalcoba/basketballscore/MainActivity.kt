@@ -12,7 +12,11 @@ import com.mgobeaalcoba.basketballscore.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
     // TODO: Cuando trabajemos sobre el resto del ciclo de vida de la Activity vamos a tener que pasar las
     // TODO: variables de MianActivity a MainViewModel.
-    private lateinit var viewModel: ViewModel
+
+    private lateinit var viewModel: MainViewModel
+    private var localScoreInt = 0
+    private var visitantScoreInt = 0
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,12 +28,9 @@ class MainActivity : AppCompatActivity() {
 
         // Equipo Local:
 
-        val localScoreText = binding.localScoreText.text.toString()
-        var localScoreInt = localScoreText.toInt()
-
         binding.localMinusButton.setOnClickListener {
             if (localScoreInt != 0) {
-                --localScoreInt
+                minusOne(true)
                 binding.localScoreText.text = localScoreInt.toString()
             } else {
                 Log.w("MainActivity","The score is already at zero")
@@ -38,23 +39,20 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.localPlusButton.setOnClickListener {
-            ++localScoreInt
+            plusOne(true)
             binding.localScoreText.text = localScoreInt.toString()
         }
 
         binding.localTwoPointsButton.setOnClickListener {
-            localScoreInt += 2
+            plusTwo(true)
             binding.localScoreText.text = localScoreInt.toString()
         }
 
         // Equipo visitante:
 
-        val visitantScoreText = binding.visitantScoreText.text.toString()
-        var visitantScoreInt = visitantScoreText.toInt()
-
         binding.visitantMinusButton.setOnClickListener {
             if (visitantScoreInt != 0) {
-                --visitantScoreInt
+                minusOne(false)
                 binding.visitantScoreText.text = visitantScoreInt.toString()
             } else {
                 Log.w("MainActivity","The score is already at zero")
@@ -63,20 +61,19 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.visitantPlusButton.setOnClickListener {
-            ++visitantScoreInt
+            plusOne(false)
             binding.visitantScoreText.text = visitantScoreInt.toString()
         }
 
         binding.visitantTwoPointsButton.setOnClickListener {
-            visitantScoreInt += 2
+            plusTwo(false)
             binding.visitantScoreText.text = visitantScoreInt.toString()
         }
 
         // Reloj
 
         binding.restartButton.setOnClickListener {
-            localScoreInt = 0
-            visitantScoreInt = 0
+            resetScore()
             binding.localScoreText.text = localScoreInt.toString()
             binding.visitantScoreText.text = visitantScoreInt.toString()
         }
@@ -86,6 +83,35 @@ class MainActivity : AppCompatActivity() {
             openDetailActivity(match)
         }
 
+    }
+
+    private fun resetScore() {
+        localScoreInt = 0
+        visitantScoreInt = 0
+    }
+
+    private fun minusOne(local: Boolean) {
+        if (local) {
+            --localScoreInt
+        } else {
+            --visitantScoreInt
+        }
+    }
+
+    private fun plusOne(local: Boolean) {
+        if (local) {
+            ++localScoreInt
+        } else {
+            ++visitantScoreInt
+        }
+    }
+
+    private fun plusTwo(local: Boolean) {
+        if (local) {
+            localScoreInt += 2
+        } else {
+            visitantScoreInt += 2
+        }
     }
 
     private fun openDetailActivity(matchScore : MatchScore) {
