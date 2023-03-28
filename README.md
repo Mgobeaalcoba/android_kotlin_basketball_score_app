@@ -1,6 +1,6 @@
 # android_kotlin_basketball_score_app
 
-Con esta app hemos profundizado y practicado, sin ningun acompañamiento los siguiente temas sobre Android: 
+Con esta app hemos profundizado y practicado los siguiente temas sobre Android: 
 
 - Android Views.
 - ImageViews - Incluye imágenes en tus apps.
@@ -10,10 +10,10 @@ Con esta app hemos profundizado y practicado, sin ningun acompañamiento los sig
 - Logging con Android.
 - Toasts.
 - Recursos String.
-- Como crear apps multi lenguajes.
+- Apps multi lenguajes.
 - Data Binding.
-- Como insertar y cambiar el ícono de la app.
-- Qué es el Android Manifest.
+- Insertar y cambiar el ícono de la app.
+- Android Manifest.
 - Tipos de Layouts.
 - RelativeLayout.
 - Explicit intents: Como abrir otras activities.
@@ -23,7 +23,7 @@ Con esta app hemos profundizado y practicado, sin ningun acompañamiento los sig
 - Pasar fotos entre activities.
 - ScrollViews.
 - ConstraintLayout.
-- Conocerás el archivo build.gradle.
+- archivo build.gradle.
 
 Así luce la app terminada:
 
