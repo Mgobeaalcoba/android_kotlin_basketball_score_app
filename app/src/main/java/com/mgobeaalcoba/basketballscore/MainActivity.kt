@@ -10,13 +10,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.mgobeaalcoba.basketballscore.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
-    // TODO: Cuando trabajemos sobre el resto del ciclo de vida de la Activity vamos a tener que pasar las
-    // TODO: variables de MianActivity a MainViewModel.
 
     private lateinit var viewModel: MainViewModel
-    private var localScoreInt = 0
-    private var visitantScoreInt = 0
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,9 +24,9 @@ class MainActivity : AppCompatActivity() {
         // Equipo Local:
 
         binding.localMinusButton.setOnClickListener {
-            if (localScoreInt != 0) {
-                minusOne(true)
-                binding.localScoreText.text = localScoreInt.toString()
+            if (viewModel.localScoreInt != 0) {
+                viewModel.minusOne(true)
+                binding.localScoreText.text = viewModel.localScoreInt.toString()
             } else {
                 Log.w("MainActivity","The score is already at zero")
                 Toast.makeText(this, getString(R.string.already_at_zero),Toast.LENGTH_SHORT).show()
@@ -39,21 +34,21 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.localPlusButton.setOnClickListener {
-            plusOne(true)
-            binding.localScoreText.text = localScoreInt.toString()
+            viewModel.plusOne(true)
+            binding.localScoreText.text = viewModel.localScoreInt.toString()
         }
 
         binding.localTwoPointsButton.setOnClickListener {
-            plusTwo(true)
-            binding.localScoreText.text = localScoreInt.toString()
+            viewModel.plusTwo(true)
+            binding.localScoreText.text = viewModel.localScoreInt.toString()
         }
 
         // Equipo visitante:
 
         binding.visitantMinusButton.setOnClickListener {
-            if (visitantScoreInt != 0) {
-                minusOne(false)
-                binding.visitantScoreText.text = visitantScoreInt.toString()
+            if (viewModel.visitantScoreInt != 0) {
+                viewModel.minusOne(false)
+                binding.visitantScoreText.text = viewModel.visitantScoreInt.toString()
             } else {
                 Log.w("MainActivity","The score is already at zero")
                 Toast.makeText(this, getString(R.string.already_at_zero),Toast.LENGTH_SHORT).show()
@@ -61,57 +56,28 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.visitantPlusButton.setOnClickListener {
-            plusOne(false)
-            binding.visitantScoreText.text = visitantScoreInt.toString()
+            viewModel.plusOne(false)
+            binding.visitantScoreText.text = viewModel.visitantScoreInt.toString()
         }
 
         binding.visitantTwoPointsButton.setOnClickListener {
-            plusTwo(false)
-            binding.visitantScoreText.text = visitantScoreInt.toString()
+            viewModel.plusTwo(false)
+            binding.visitantScoreText.text = viewModel.visitantScoreInt.toString()
         }
 
         // Reloj
 
         binding.restartButton.setOnClickListener {
-            resetScore()
-            binding.localScoreText.text = localScoreInt.toString()
-            binding.visitantScoreText.text = visitantScoreInt.toString()
+            viewModel.resetScore()
+            binding.localScoreText.text = viewModel.localScoreInt.toString()
+            binding.visitantScoreText.text = viewModel.visitantScoreInt.toString()
         }
 
         binding.resultsButton.setOnClickListener {
-            val match = MatchScore(localScoreInt, visitantScoreInt)
-            openDetailActivity(match)
+            //val match = MatchScore(localScoreInt, visitantScoreInt)
+            openDetailActivity(viewModel.createMatch())
         }
 
-    }
-
-    private fun resetScore() {
-        localScoreInt = 0
-        visitantScoreInt = 0
-    }
-
-    private fun minusOne(local: Boolean) {
-        if (local) {
-            --localScoreInt
-        } else {
-            --visitantScoreInt
-        }
-    }
-
-    private fun plusOne(local: Boolean) {
-        if (local) {
-            ++localScoreInt
-        } else {
-            ++visitantScoreInt
-        }
-    }
-
-    private fun plusTwo(local: Boolean) {
-        if (local) {
-            localScoreInt += 2
-        } else {
-            visitantScoreInt += 2
-        }
     }
 
     private fun openDetailActivity(matchScore : MatchScore) {
