@@ -227,6 +227,420 @@ Con esto ya no se podrá acceder a los LiveData editables desde otro archivo y s
 
 ----------------------------------
 
+## **Usando el ViewModel dentro del Data Binding**
+
+Dentro la sección "data" del "layout" (el que sea que hayamos escogido), si recuerdan bien, se pueden agregar variables. 
+
+Vamos entonces a agregar el ViewModel como una variable dentro del layout para consumir la información desde el mismo. 
+
+1- seteamos la variable en "activity_main.xml": 
+
+```xml
+    <data>
+        <variable
+            name="mainViewModel"
+            type="com.mgobeaalcoba.basketballscore.MainViewModel" />
+    </data>
+```
+Con el viewModel acá podemos pasar bastante codigo de MainActivity...
+
+**Vamos a pasar los "onClickListener" desde el MainActivity hacia el layout "activity_main.xml"**
+
+*¿Como va a suceder esto?* Mediante la ejecución de una función lambda que pondremos en el .xml y que se va a ejecutar cuando el usuario haga click en cualquiera de nuestros botones.
+
+Con esto eliminamos de nuestro main toda la **"private fun setupButtons() {}"**
+
+Y agredamos en todos los views que sean botones:
+
+**android:onClick="@{() -> {ViewModel}.{Metodo del ViewModel}()}"**
+
+Fundamental para que todo esto funcione: 
+
+**Debemos asignar nuestra instancia de viewModel a binding.mainViewModel para que sepa que objeto de la clase mainViewModel es el que tiene que leer.**
+
+**¿Como queda entonces nuestro .xml?**
+
+*Notas: El boton de resultsButton lo voy a seguir manejando desde el MainActivity dado que es el que conecta con la otra Activity y no lo tengo en el MainViewModel.* 
+
+*Por otro lado, el botón de minusOne tambien lo voy a dejar en el main. Dado que con esa función en el MainViewModel retorno un booleano que me permité entender si debo o no mostrar un toast al usuario y un log al developer y este retorno no lo podría aprovechar desde el activity_main.xml*
+
+asi es que: 
+
+**¿Como queda el activity_main.xml?**
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="mainViewModel"
+            type="com.mgobeaalcoba.basketballscore.MainViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        tools:context=".MainActivity">
+        
+        <TextView
+            android:id="@+id/local_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:text="@string/local"
+            android:textColor="@color/black"
+            android:textSize="40sp"
+            android:textStyle="bold"/>
+
+        <LinearLayout
+            android:id="@+id/upper_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/local_text"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/local_minus_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="@string/minus_one"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/local_score_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/points_local"
+                android:textColor="@color/black"
+                android:textSize="72sp"
+                tools:text="62" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/local_plus_button"
+                    android:onClick="@{() -> mainViewModel.plusOne(true)}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:text="@string/plus_one"
+                    android:textSize="24sp" />
+
+                <Button
+                    android:id="@+id/local_two_points_button"
+                    android:onClick="@{() -> mainViewModel.plusTwo(true)}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:text="@string/plus_two"
+                    android:textSize="24sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/center_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_below="@id/upper_layout"
+            android:layout_marginTop="32dp"
+            android:padding="16dp">
+
+            <ImageButton
+                android:id="@+id/restart_button"
+                android:onClick="@{() -> mainViewModel.resetScore()}"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:padding="16dp"
+                android:textColor="@color/black"
+                android:text="Prueba"
+                android:src="@drawable/ic_restore_black" />
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:src="@drawable/basket_ball"
+                android:textColor="@color/black"
+                android:textSize="60sp"
+                tools:text="62" />
+
+            <ImageButton
+                android:id="@+id/results_button"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:padding="16dp"
+                android:src="@drawable/ic_arrow_right_black" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/down_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/center_layout"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="32dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/visitant_minus_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="@string/minus_one"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/visitant_score_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/points_visitant"
+                android:textColor="@color/black"
+                android:textSize="72sp"
+                tools:text="62" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/visitant_plus_button"
+                    android:onClick="@{() -> mainViewModel.plusOne(false)}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:text="@string/plus_one"
+                    android:textSize="24sp" />
+
+                <Button
+                    android:id="@+id/visitant_two_points_button"
+                    android:onClick="@{() -> mainViewModel.plusTwo(false)}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:text="@string/plus_two"
+                    android:textSize="24sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/visitant_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/down_layout"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="Visitante"
+            android:textColor="@color/black"
+            android:textSize="40sp"
+            android:textStyle="bold"/>
+
+    </RelativeLayout>
+
+</layout>
+```
+
+**¿Como queda entonces el MainActivity?**
+
+```kotlin
+package com.mgobeaalcoba.basketballscore
+
+import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
+import androidx.core.content.ContextCompat.startActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import com.mgobeaalcoba.basketballscore.databinding.ActivityMainBinding
+
+class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var viewModel: MainViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Cargamos nuestro data binding:
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        // Instanciamos en "onCreate" nuestro viewModel:
+        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+
+        // Asigno nuestra instanciación del MainViewModel, que es viewModel como atributo mainViewModel del binding:
+        // mainViewModel es la variable que creamos en el layout!!!
+        binding.mainViewModel = viewModel
+
+        // Generamos los Observadores de las variables del MainViewModel:
+        viewModel.localScoreInt.observe(this, Observer {
+                localScoreValue: Int ->
+            binding.localScoreText.text = localScoreValue.toString()
+        })
+
+        viewModel.visitantScoreInt.observe(this, Observer {
+                visitantScoreValue: Int ->
+            binding.visitantScoreText.text = visitantScoreValue.toString()
+        })
+
+        setupButtons()
+    }
+
+    private fun setupButtons() {
+
+        // Decisión: Sigo manejando los metodos de MainViewModel.minusOne y .createMatch por acá
+        // dado que minusOne me retorna un booleano que lo uso para lanzar un toast al user y un log
+        // al developer. En el caso del .createMatch es una función que está acá y no en el MainViewModel
+
+        // Equipo Local:
+        binding.localMinusButton.setOnClickListener {
+            val exeToast = viewModel.minusOne(true)
+            if (exeToast) {
+                Log.w("MainActivity","The score is already at zero")
+                Toast.makeText(this, getString(R.string.already_at_zero),Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        // Equipo visitante:
+        binding.visitantMinusButton.setOnClickListener {
+            val exeToast = viewModel.minusOne(false)
+            if (exeToast) {
+                Log.w("MainActivity","The score is already at zero")
+                Toast.makeText(this, getString(R.string.already_at_zero),Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        binding.resultsButton.setOnClickListener {
+            openDetailActivity(viewModel.createMatch())
+        }
+
+    }
+
+    private fun openDetailActivity(matchScore : MatchScore) {
+        // Creamos un intent activity:
+        val intent = Intent(this, ScoreActivity::class.java) // Explicit intent
+
+        // Solo voy a pasar como putExtra el objeto matchScore:
+        intent.putExtra(ScoreActivity.MATCH_SCORE_KEY, matchScore)
+
+        // Enviamos el objeto matchScore a la siguiente activity:
+        startActivity(intent)
+    }
+
+}
+```
+
+**¿Como queda el MainViewModel?**
+
+```kotlin
+package com.mgobeaalcoba.basketballscore
+
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+
+class MainViewModel: ViewModel() {
+    private var _localScoreInt: MutableLiveData<Int> = MutableLiveData()
+    private var _visitantScoreInt: MutableLiveData<Int> = MutableLiveData()
+
+    val localScoreInt: LiveData<Int>
+        get() = _localScoreInt
+
+    val visitantScoreInt: LiveData<Int>
+        get() = _visitantScoreInt
+
+    // Creamos una función init que se ejecuta apenas se instancia un MainViewModel
+    init {
+        resetScore() // Nos aseguramos que los valores van a arrancar en cero
+    }
+
+    // Reset:
+    fun resetScore() {
+        _localScoreInt.value = 0
+        _visitantScoreInt.value = 0
+    }
+
+    fun minusOne(local: Boolean) : Boolean {
+        var needToast = false
+        if (local) {
+            // Solo reduzco si es distinto de cero.
+            if (_localScoreInt.value != 0) {
+                // Ejecuto el minus solo si el value de localScoreInt no es nulo (safe call)
+                _localScoreInt.value = _localScoreInt.value?.minus(1)
+            } else {
+                needToast = true
+            }
+        } else {
+            // Solo reduzco si es distinto de cero.
+            if (_visitantScoreInt.value != 0) {
+                // Ejecuto el minus solo si el value de localScoreInt no es nulo (safe call)
+                _visitantScoreInt.value = _visitantScoreInt.value?.minus(1)
+            } else {
+                needToast = true
+            }
+        }
+        return needToast
+    }
+
+   fun plusOne(local: Boolean) {
+        if (local) {
+            _localScoreInt.value = _localScoreInt.value?.plus(1)
+        } else {
+            _visitantScoreInt.value = _visitantScoreInt.value?.plus(1)
+        }
+    }
+
+    fun plusTwo(local: Boolean) {
+        if (local) {
+            _localScoreInt.value = _localScoreInt.value?.plus(2)
+        } else {
+            _visitantScoreInt.value = _visitantScoreInt.value?.plus(2)
+        }
+    }
+
+    fun createMatch() :MatchScore {
+        return MatchScore(_localScoreInt.value!!, _visitantScoreInt.value!!)
+    }
+
+}
+```
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="mainViewModel"
+            type="com.mgobeaalcoba.basketballscore.MainViewModel" />
     </data>
 
     <RelativeLayout
@@ -62,6 +64,7 @@
 
                 <Button
                     android:id="@+id/local_plus_button"
+                    android:onClick="@{() -> mainViewModel.plusOne(true)}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
@@ -70,6 +73,7 @@
 
                 <Button
                     android:id="@+id/local_two_points_button"
+                    android:onClick="@{() -> mainViewModel.plusTwo(true)}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
@@ -91,6 +95,7 @@
 
             <ImageButton
                 android:id="@+id/restart_button"
+                android:onClick="@{() -> mainViewModel.resetScore()}"
                 android:layout_width="72dp"
                 android:layout_height="72dp"
                 android:padding="16dp"
@@ -153,6 +158,7 @@
 
                 <Button
                     android:id="@+id/visitant_plus_button"
+                    android:onClick="@{() -> mainViewModel.plusOne(false)}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
@@ -161,6 +167,7 @@
 
                 <Button
                     android:id="@+id/visitant_two_points_button"
+                    android:onClick="@{() -> mainViewModel.plusTwo(false)}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"

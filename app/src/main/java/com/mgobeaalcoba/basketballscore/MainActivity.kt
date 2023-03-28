@@ -25,6 +25,10 @@ class MainActivity : AppCompatActivity() {
         // Instanciamos en "onCreate" nuestro viewModel:
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
+        // Asigno nuestra instanciación del MainViewModel, que es viewModel como atributo mainViewModel del binding:
+        // mainViewModel es la variable que creamos en el layout!!!
+        binding.mainViewModel = viewModel
+
         // Generamos los Observadores de las variables del MainViewModel:
         viewModel.localScoreInt.observe(this, Observer {
                 localScoreValue: Int ->
@@ -40,6 +44,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupButtons() {
+
+        // Decisión: Sigo manejando los metodos de MainViewModel.minusOne y .createMatch por acá
+        // dado que minusOne me retorna un booleano que lo uso para lanzar un toast al user y un log
+        // al developer. En el caso del .createMatch es una función que está acá y no en el MainViewModel
+
         // Equipo Local:
         binding.localMinusButton.setOnClickListener {
             val exeToast = viewModel.minusOne(true)
@@ -49,14 +58,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        binding.localPlusButton.setOnClickListener {
-            viewModel.plusOne(true)
-        }
-
-        binding.localTwoPointsButton.setOnClickListener {
-            viewModel.plusTwo(true)
-        }
-
         // Equipo visitante:
         binding.visitantMinusButton.setOnClickListener {
             val exeToast = viewModel.minusOne(false)
@@ -64,20 +65,6 @@ class MainActivity : AppCompatActivity() {
                 Log.w("MainActivity","The score is already at zero")
                 Toast.makeText(this, getString(R.string.already_at_zero),Toast.LENGTH_SHORT).show()
             }
-        }
-
-        binding.visitantPlusButton.setOnClickListener {
-            viewModel.plusOne(false)
-        }
-
-        binding.visitantTwoPointsButton.setOnClickListener {
-            viewModel.plusTwo(false)
-        }
-
-        // Reloj
-
-        binding.restartButton.setOnClickListener {
-            viewModel.resetScore()
         }
 
         binding.resultsButton.setOnClickListener {
