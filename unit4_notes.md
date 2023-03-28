@@ -1,6 +1,6 @@
 # Unidad 4: Post Basketball Score App (Proyecto que resolví solo):
 
-**Activity Lifecycle** 
+## **Activity Lifecycle** 
 
 Como su nombre lo indica es el ciclo de vida de una Activity. Es un poco mas complejo que el ciclo de vida humano (nacer, crecer, reproducirse y morir) pero al igual que el ultimo sigue una estructura con etapas obligadas (nacer, crecer y morir) y otras optavivas (reproducirse). Es un poco más complejo porque tiene más pasos, incluso algunos se regresan.
 
@@ -33,8 +33,6 @@ Al volver al modo vertical va a pasar nuevamente lo mismo.
 
 Este ciclo de vida al rotar va a hacer que por ejemplo, el marcador de nuestra app de basketball se pierda frente a la rotación. Por lo que tendremos que aprender a manejar esta situación...
 
------------------------------
-
 Para efectos de programación en Android, **una Activity es un View**, pero **no hay que confundirlo con los tipos de views que hemos estado viendo**, que son los botones TextView. Sino más bien es una clase de tipo View, porque es la que se dedica a mostrar la información al usuario.
 Pero **las Activities tienen un problema y es que nosotros no tenemos control sobre ellas**. Como te mencioné en las lecciones pasadas, Android puede destruirlas cuando se le dé la gana.
 Ya lo vimos que puede suceder tanto cuando abres otra aplicación que necesita recursos como cuando por ejemplo, giras la pantalla, perdemos todos los datos y no hay mucho control o no hay mucho que hacer con eso.
@@ -45,6 +43,10 @@ Cuando eso sucede debemos recurrir a otra clase, auxiliar a las activities, para
 
 Entonces, en resumen, todo lo que sea de **mostrar datos y reaccionar a la pantalla se va a hacer con la Activity** y todas las variables, todo el procesamiento, **todo lo demás se va a hacer con el ViewModel**.
 
+-----------------------------
+
+## **ViewModel**
+
 El ViewModel es una clase que mientras la Activity realiza todo su ciclo de vida (se crea, se pausa, detiene, restablece, muere, etc) sigue vivo en todo el proceso.
 
 ![Captura 2](screenshots/viewmodel_1.png)
@@ -54,4 +56,30 @@ Pero si los tenemos ahora almcenados en el ViewModel vemos que como el modelo so
 Y otra gran ventaja que yo veo es que cuando hacemos llamados a Internet, nosotros no sabemos en qué momento va a contestar el servidor. Esto depende mucho de la velocidad del Internet, de cómo esté programado el backend.
 Entonces, como no sabemos en qué momento va a llegar... un problema muy recurrente que teníamos antes, cuando no existía esto del ViewModel, es que si esos datos volvían después del "on pause" o del "on stop", la app se rompía porque no tenía forma de mostrarlo, porque la Activity ya estaba destruida. 
 Con el ViewModel si esta operación se está haciendo y la Activity manda a llamar Destroy, el modelo automáticamente va a destruir el proceso y no va a tratar de mostrar nada y entonces te ahorras bastantes problemas que teníamos antes como programadores de Android. Y este mismo problema aplicaba tanto para cuando traíamos datos de Internet como cuando los traíamos desde la base de datos.
+
+Pasos para trabajar con ViewModel: 
+
+1- Agregar una dependencia extra, dado que ViewModel no viene con Android Studio por defecto. ¿Como? 
+En "dependencies" de build.gradle (:app) agregamos: 
+- "**implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1'**" -> Sync now
+2- En MainActivity creamos una variable global (es decir, dentro de la class MainActivity pero fuera del metodo "onCreate" del lyfecycle): 
+- **private lateinit var viewModel: ViewModel**
+3- Dentro del metodo "onCreate" vamos a instanciar a "viewModel:
+- **viewModel = ViewModelProvider(this).get(MainViewModel::class.java)** 
+Los ViewModel los creamos de esta manera porque tienen algo especial. Como dijimos arriba un ViewModel, cuando destruimos una actividad al girar el teléfono, por ejemplo, el ViewModel no se destruye, sino que sigue vivo hasta que la actividad se destruye por completo.
+Entonces, al crear el ViewModel de esta manera, lo que hace es que si giramos el teléfono, la actividad vuelve a llamar a este metodo "on create" pero al hacer esto ya va a detectar que el ViewModel está creado y no va a crear uno nuevo. Esta última parte es el efecto del ".get(Main...)" que está arriba. 
+4- Vamos a ir a la carpeta de nuestro paquete ("com.{empresa}.{proyecto}") y hacemos: Botón derecho -> New -> Kotlin Class/File
+5- Le ponemos el nombre que ya hacemos usado dentro del ".get(Main...)":
+- **MainViewModel**, seleccionamos clase y Enter. 
+6- Esta clase va a **heredar** de un ViewModel. ¿Como? En kotlin así: 
+```
+class MainViewModel: ViewModel() {
+    // Class MainViewModel que hereda atributos y metodos de la class ViewModel (importada)
+}
+```
+
+### A partir de acá comienza a regir la regla de oro: SEPARACION DE PREOCUPACIONES:
+
+**La regla de oro nos dice que el *MainViewModel* haga todo lo que tenga que ver con lógica, y el *MainActivity* solamente se dedique a pintar los datos para el usuario y a responder a las acciones del usuario.**
+
 

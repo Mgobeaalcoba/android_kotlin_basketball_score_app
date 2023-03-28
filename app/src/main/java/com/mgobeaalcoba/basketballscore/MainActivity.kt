@@ -5,13 +5,22 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.mgobeaalcoba.basketballscore.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+    // TODO: Cuando trabajemos sobre el resto del ciclo de vida de la Activity vamos a tener que pasar las
+    // TODO: variables de MianActivity a MainViewModel.
+    private lateinit var viewModel: ViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Instanciamos en "onCreate" nuestro viewModel:
+        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
         // Equipo Local:
 
