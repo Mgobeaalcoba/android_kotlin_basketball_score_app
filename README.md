@@ -24,6 +24,9 @@ Con esta app hemos profundizado y practicado los siguiente temas sobre Android:
 - ScrollViews.
 - ConstraintLayout.
 - archivo build.gradle.
+- Activity Lifecycle
+- ViewModel
+- LiveData & Observer
 
 Así luce la app terminada:
 
